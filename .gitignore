@@ -102,3 +102,12 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# Maho Bot
+Logs/
+maho.db
+config.py
+
+# Editors
+.vscode/
+.idea/

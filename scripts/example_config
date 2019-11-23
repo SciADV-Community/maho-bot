@@ -1,0 +1,9 @@
+MOD = "{0}"
+DESCRIPTION = "{1}"
+TOKEN = "{2}"
+
+ADMINS = {3}
+MODULES = {4}
+STARTUP_MODULES = {5}
+
+DB = "{6}"

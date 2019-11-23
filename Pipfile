@@ -1,0 +1,22 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+pylint = "*"
+black = "*"
+pytest = "*"
+pytest-cov = "*"
+
+[packages]
+discord-py = "*"
+click = "*"
+maho = {editable = true,path = "."}
+inquirer = "*"
+
+[requires]
+python_version = "3.6"
+
+[pipenv]
+allow_prereleases = true
