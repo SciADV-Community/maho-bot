@@ -1,13 +1,13 @@
 import logging
-import config
+from maho import config
 
 
-def get_logger():
-    """Utility function to give access to the Logger"""
-    logger = logging.getLogger("maho-bot")
-    logger.setLevel(logging.INFO)
+def generate_logger():
+    """Utility function to create the Logger"""
+    logger = logging.getLogger("Maho")
+    logger.setLevel(logging.DEBUG)
 
-    handler = logging.FileHandler(filename="maho-bot.log", encoding="utf-8", mode="a")
+    handler = logging.FileHandler(filename="maho-log.log", encoding="utf-8", mode="a")
     handler.setFormatter(
         logging.Formatter("%(asctime)s:%(levelname)s:%(name)s: %(message)s")
     )
@@ -15,6 +15,14 @@ def get_logger():
     logger.addHandler(handler)
 
     return logger
+
+
+_logger = generate_logger()
+
+
+def get_logger():
+    """Utility function to give access to the Logger"""
+    return _logger
 
 
 async def send_message(context, message):
@@ -42,7 +50,9 @@ async def load_module(client, module, context=None):
         return False
 
     try:
+        module = f"maho.modules.{module}"
         client.load_extension(module)
+        logger.info("Module %s was successfully loaded.", module)
         await send_message(context, f"{module} was successfully loaded.")
         return True
     except (AttributeError, ImportError) as e:
@@ -68,7 +78,9 @@ async def unload_module(client, module, context=None):
         return False
 
     try:
+        module = f"maho.modules.{module}"
         client.unload_extension(module)
+        logger.info("Module %s was successfully unloaded.", module)
         await send_message(context, f"{module} was successfully unloaded.")
         return True
     except (AttributeError, ImportError) as e:

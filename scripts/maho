@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 import re
+import subprocess
+import runpy
 from pathlib import Path
 import shutil
 import click
@@ -29,34 +31,25 @@ def maho():
 @click.option(
     "--description", "-d", prompt="The bot's description text", type=str, default=""
 )
-@click.option(
-    "--token",
-    "-t",
-    prompt="The bot's access token",
-    type=str,
-    default="# TODO Set later",
-)
+@click.option("--token", "-t", prompt="The bot's access token", type=str)
 @click.option("--admins", "-a", prompt="User IDs of Bot admins", type=str, default="")
 @click.option(
-    "--database",
-    "-db",
-    prompt="Name of the SQLite DB file to use",
-    type=str,
-    default="maho.db",
+    "--database", "-db", prompt="The database file to use", type=str, default="maho.db"
 )
 def init(prefix, description, token, admins, database):
-    """
-    Initialize the bot's configuration.
-    """
-    scripts_dir = Path(__file__).parent
-    project_dir = scripts_dir.parent / "src" / "maho"
+    """Initialize the bot's configuration."""
+    root_dir = Path(__file__).parent.parent
 
     ### Admin parsing
-    admins = stringify_list(re.split(r", |,| ", admins))
+    admins = ";".join(re.split(r", |,| ", admins))
 
     ### Module prompt
-    module_folder = project_dir / "modules"
-    all_modules = [file.stem for file in module_folder.glob("*.py")]
+    module_folder = root_dir / "src" / "maho" / "modules"
+    all_modules = [
+        file.stem
+        for file in module_folder.glob("*.py")
+        if not file.stem.startswith("__") and file.stem != "help"
+    ]
 
     questions = [
         inquirer.Checkbox(
@@ -64,8 +57,7 @@ def init(prefix, description, token, admins, database):
         )
     ]
     answers = inquirer.prompt(questions)
-    modules = [f"mod.{module}" for module in answers["mods"]]
-    modules = stringify_list(modules)
+    modules = ";".join([f"{module}" for module in answers["mods"]])
 
     questions = [
         inquirer.Checkbox(
@@ -75,22 +67,34 @@ def init(prefix, description, token, admins, database):
         )
     ]
     answers = inquirer.prompt(questions)
-    startup_modules = [f"mod.{module}" for module in answers["startup_mods"]]
-    startup_modules = stringify_list(startup_modules)
+    startup_modules = ";".join([f"{module}" for module in answers["startup_mods"]])
 
-    ### Load config string
-    example_config = scripts_dir / "example_config"
-    with example_config.open() as f:
-        config = f.read()
-    config = config.format(
-        prefix, description, token, admins, modules, startup_modules, database
-    )
-
-    target_file = project_dir / "config.py"
-    with target_file.open(mode="w") as f:
-        f.write(config)
+    ### Save into .env file
+    dotenv = root_dir / ".env"
+    with dotenv.open(mode="w") as f:
+        f.writelines(
+            [
+                f"BOT_PREFIX={prefix}\n",
+                f"BOT_TOKEN={token}\n",
+                f"BOT_DESCRIPTION={description}\n",
+                f"BOT_ADMINS={admins}\n",
+                f"BOT_MODULES={modules}\n",
+                f"BOT_STARTUP_MODULES={startup_modules}\n",
+                f"BOT_DB={database}\n",
+            ]
+        )
 
     click.secho("Config initalized successfully.", fg="green")
+
+
+@maho.command()
+def test():
+    subprocess.run("pytest")
+
+
+@maho.command()
+def run():
+    runpy.run_module("maho.main", run_name="__main__")
 
 
 if __name__ == "__main__":

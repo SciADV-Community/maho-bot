@@ -106,7 +106,6 @@ venv.bak/
 # Maho Bot
 Logs/
 maho.db
-config.py
 
 # Editors
 .vscode/

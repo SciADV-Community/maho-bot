@@ -7,7 +7,7 @@ from maho import config, utils
 class Markov(commands.Cog):
     def __init__(self, client):
         self.client = client
-		logger = utils.get_logger()
+        logger = utils.get_logger()
         logger.info("Module %s loaded", self.__class__.__name__)
 
     @commands.command(pass_context=True)

@@ -11,7 +11,7 @@ model.setup()
 
 # State
 loaded_modules = []
-client = commands.Bot(command_prefix=config.MOD, description=config.DESCRIPTION)
+client = commands.Bot(command_prefix=config.PREFIX, description=config.DESCRIPTION)
 
 
 @client.event
@@ -22,9 +22,10 @@ async def on_ready():
     for guild in client.guilds:
         print(guild.name)
 
-    print(f"------ Loading Modules ({len(config.STARTUP_MODULES)}) ------")
-    for module in config.STARTUP_MODULES:
-        await utils.load_module(client, module)
+    print(f"------ Loading Modules ({len(config.STARTUP)}) ------")
+    for module in config.STARTUP:
+        if await utils.load_module(client, module):
+            loaded_modules.append(module)
 
 
 # Commands

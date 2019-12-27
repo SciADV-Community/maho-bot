@@ -31,13 +31,12 @@ def get_date(festivity):
 class Festive(commands.Cog):
     def __init__(self, client):
         self.client = client
-		logger = utils.get_logger()
+        logger = utils.get_logger()
         logger.info("Module %s loaded", self.__class__.__name__)
 
     @commands.command(pass_context=True)
     async def festive(self, context):
-        self.client.cursor.execute("SELECT * FROM Festive")
-        festivities = self.client.cursor.fetchall()
+        festivities = model.get_festivities()
 
         msg = ""
         for festivity in sorted(festivities, key=get_date):

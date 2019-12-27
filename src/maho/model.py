@@ -30,3 +30,8 @@ def setup(cursor=None):
 @auto_commit
 def add_festivity(date, festivity, cursor=None):
     cursor.execute("INSERT INTO Festive VALUES (?, ?)", (date, festivity,))
+
+@auto_commit
+def get_festivities(cursor=None):
+    cursor.execute("SELECT * FROM Festive")
+    return cursor.fetchall()
