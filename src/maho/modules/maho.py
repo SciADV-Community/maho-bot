@@ -15,7 +15,7 @@ def load_static_text(filename: str) -> str:
         return ""
 
 
-class Maho(commands.Cog):
+class Maho(commands.Cog):  # pragma: no cover
     """Cog for general maho commands."""
 
     def __init__(self, client):
@@ -76,6 +76,6 @@ class Maho(commands.Cog):
             await context.send("@everyone (´・ω・`)")
 
 
-def setup(client):
+def setup(client):  # pragma: no cover
     """Add the cog to the client."""
     client.add_cog(Maho(client))

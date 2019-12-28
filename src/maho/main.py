@@ -1,13 +1,13 @@
 #!env/bin/python3
 """Main module to run the bot."""
 from discord.ext import commands
-from maho import config, model, utils
+from maho import config, models, utils
 
 # Logging
 logger = utils.get_logger()
 
 # Model setup
-model.setup()
+models.setup()
 
 # State
 loaded_modules = []

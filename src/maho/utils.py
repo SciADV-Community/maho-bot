@@ -26,13 +26,13 @@ def get_logger():
     return _logger
 
 
-async def send_message(context, message):
+async def send_message(context, message):  # pragma: no cover
     """Send a message if the the provided context is not None."""
     if context:
         await context.send(message)
 
 
-async def load_module(client, module, context=None):
+async def load_module(client, module, context=None):  # pragma: no cover
     """Load a certain module. Returns whether or not the loading succeeded."""
     logger = get_logger()
 
@@ -65,7 +65,7 @@ async def load_module(client, module, context=None):
         return False
 
 
-async def unload_module(client, module, context=None):
+async def unload_module(client, module, context=None):  # pragma: no cover
     """Unload a certain module. Returns whether or not the unloading succeeded."""
     logger = get_logger()
 

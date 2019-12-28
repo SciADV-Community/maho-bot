@@ -1,15 +1,15 @@
 #!/usr/bin/env python
+"""Commandline utility to inetteract with the bot."""
 import re
 import subprocess
 import runpy
 from pathlib import Path
-import shutil
 import click
 import inquirer
 
 
 def stringify_list(values, process=None):
-    """Function to change a python list into its string representation"""
+    """Change a python list into its string representation."""
     strings = [f'"{value}"' for value in values if value]
     if process:
         strings = [process(string) for string in strings]
@@ -18,9 +18,7 @@ def stringify_list(values, process=None):
 
 @click.group()
 def maho():
-    """
-    Command line tool to manage the bot.
-    """
+    """Manage the bot."""
     pass
 
 
@@ -36,14 +34,14 @@ def maho():
 @click.option(
     "--database", "-db", prompt="The database file to use", type=str, default="maho.db"
 )
-def init(prefix, description, token, admins, database):
+def config(prefix, description, token, admins, database):
     """Initialize the bot's configuration."""
     root_dir = Path(__file__).parent.parent
 
-    ### Admin parsing
+    # Admin parsing
     admins = ";".join(re.split(r", |,| ", admins))
 
-    ### Module prompt
+    # Module prompt
     module_folder = root_dir / "src" / "maho" / "modules"
     all_modules = [
         file.stem
@@ -69,18 +67,18 @@ def init(prefix, description, token, admins, database):
     answers = inquirer.prompt(questions)
     startup_modules = ";".join([f"{module}" for module in answers["startup_mods"]])
 
-    ### Save into .env file
+    # Save into .env file
     dotenv = root_dir / ".env"
     with dotenv.open(mode="w") as f:
         f.writelines(
             [
-                f"BOT_PREFIX={prefix}\n",
-                f"BOT_TOKEN={token}\n",
-                f"BOT_DESCRIPTION={description}\n",
-                f"BOT_ADMINS='{admins}'\n",
-                f"BOT_MODULES='{modules}'\n",
-                f"BOT_STARTUP_MODULES='{startup_modules}'\n",
-                f"BOT_DB={database}\n",
+                f"export BOT_PREFIX={prefix}\n",
+                f"export BOT_TOKEN={token}\n",
+                f"export BOT_DESCRIPTION={description}\n",
+                f"export BOT_ADMINS='{admins}'\n",
+                f"export BOT_MODULES='{modules}'\n",
+                f"export BOT_STARTUP_MODULES='{startup_modules}'\n",
+                f"export BOT_DB={database}\n",
             ]
         )
 
@@ -89,11 +87,13 @@ def init(prefix, description, token, admins, database):
 
 @maho.command()
 def test():
+    """Run tests."""
     subprocess.run("pytest")
 
 
 @maho.command()
 def run():
+    """Run the bot."""
     runpy.run_module("maho.main", run_name="__main__")
 
 
