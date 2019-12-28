@@ -1,9 +1,10 @@
+"""Module with various utilities for the bot."""
 import logging
 from maho import config
 
 
 def generate_logger():
-    """Utility function to create the Logger"""
+    """Create the Logger."""
     logger = logging.getLogger("Maho")
     logger.setLevel(logging.DEBUG)
 
@@ -21,18 +22,18 @@ _logger = generate_logger()
 
 
 def get_logger():
-    """Utility function to give access to the Logger"""
+    """Give access to the Logger."""
     return _logger
 
 
 async def send_message(context, message):
-    """Utility function to send a message if the the provided context is not None."""
+    """Send a message if the the provided context is not None."""
     if context:
         await context.send(message)
 
 
 async def load_module(client, module, context=None):
-    """Utility function to load a certain module. Returns whether or not the loading succeeded."""
+    """Load a certain module. Returns whether or not the loading succeeded."""
     logger = get_logger()
 
     if context and context.author.id not in config.ADMINS:
@@ -65,7 +66,7 @@ async def load_module(client, module, context=None):
 
 
 async def unload_module(client, module, context=None):
-    """Utility function to unload a certain module. Returns whether or not the unloading succeeded."""
+    """Unload a certain module. Returns whether or not the unloading succeeded."""
     logger = get_logger()
 
     if context and context.author.id not in config.ADMINS:

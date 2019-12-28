@@ -1,5 +1,5 @@
 #!env/bin/python3
-import asyncio, discord, sqlite3
+"""Main module to run the bot."""
 from discord.ext import commands
 from maho import config, model, utils
 
@@ -16,6 +16,7 @@ client = commands.Bot(command_prefix=config.PREFIX, description=config.DESCRIPTI
 
 @client.event
 async def on_ready():
+    """Handle what happens when the bot is ready."""
     print(f"Logged in as {client.user.name} - {client.user.id}")
 
     print(f"------ Guilds ({len(client.guilds)}) ------")
@@ -31,6 +32,7 @@ async def on_ready():
 # Commands
 @client.command(pass_context=True)
 async def load(context, module: str = None):
+    """Load a module."""
     if not module:
         await context.send("Load requires the name of the module to load.")
     elif module not in loaded_modules:
@@ -43,6 +45,7 @@ async def load(context, module: str = None):
 # Unloading a module
 @client.command(pass_context=True)
 async def unload(context, module: str = None):
+    """Unload a module."""
     if not module:
         await context.send("Unload requires the name of the module to unload.")
     elif module in loaded_modules:
@@ -55,6 +58,7 @@ async def unload(context, module: str = None):
 # Reloading a module
 @client.command(pass_context=True)
 async def reload(context, module: str = None):
+    """Reload a module."""
     if module:
         if module in loaded_modules:
             if await utils.unload_module(
@@ -77,6 +81,7 @@ async def reload(context, module: str = None):
 
 @client.event
 async def on_message(message):
+    """Handle new messages."""
     if message.author is not client:
         if message.content.startswith("!!log"):
             await message.channel.send("Are you fucking retarded")
@@ -92,6 +97,7 @@ async def on_message(message):
 
 @client.event
 async def on_command_error(context, error):
+    """Handle error-handling from commands."""
     command = context.message.content.split()[0][1:]
     logger.error("Error occured for command %s: %s", command, error)
 

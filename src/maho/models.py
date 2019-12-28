@@ -1,8 +1,10 @@
+"""Module to handle model operations."""
 import sqlite3
 from maho import config
 
 
 def auto_commit(func):
+    """Wrap a db-altering function and make sure results are saved."""
     connection = sqlite3.connect(config.DB)
     cursor = connection.cursor()
 
@@ -16,6 +18,7 @@ def auto_commit(func):
 
 @auto_commit
 def setup(cursor=None):
+    """Set up the database."""
     cursor.execute(
         """
     CREATE TABLE IF NOT EXISTS Festive (
@@ -29,9 +32,12 @@ def setup(cursor=None):
 
 @auto_commit
 def add_festivity(date, festivity, cursor=None):
+    """Add a new festivity."""
     cursor.execute("INSERT INTO Festive VALUES (?, ?)", (date, festivity,))
+
 
 @auto_commit
 def get_festivities(cursor=None):
+    """Get all festivities."""
     cursor.execute("SELECT * FROM Festive")
     return cursor.fetchall()

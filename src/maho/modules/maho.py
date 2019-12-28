@@ -1,61 +1,81 @@
-import random
-from collections import Counter
+"""Command Cog wrapper module for general maho commands."""
+from pathlib import Path
 from discord.ext import commands
 from maho import config, utils
 
 
+def load_static_text(filename: str) -> str:
+    """Load static text from a file."""
+    logger = utils.get_logger()
+    try:
+        with open(Path(__file__).parent / "static" / filename) as f:
+            return f.read()
+    except FileNotFoundError:
+        logger.warning("File %s not found.", filename)
+        return ""
+
+
 class Maho(commands.Cog):
+    """Cog for general maho commands."""
+
     def __init__(self, client):
+        """Initialize the cog."""
         self.client = client
-        logger = utils.get_logger()
-        logger.info("Module %s loaded", self.__class__.__name__)
+        self.logger = utils.get_logger()
+        self.logger.info("Module %s loaded", self.__class__.__name__)
 
     @commands.command(pass_context=True)
     async def lebby(self, context):
+        """Send out a lebby."""
         await context.send("( Í¡Â° ÍœÊ– Í¡Â°)")
 
     @commands.command(pass_context=True)
     async def ChaosPomf(self, context):
-        await context.send(
-            "```Pomf pomf kimochi\nWhat's this sticky blood on me\nThey'll mess with me until\nI see delusions everywhere\nMorning, to no one\nToday I will fap to Seira-tan\nkiLL mE am I dead\nStomped by reporters```"
-        )
+        """Send out the chaos pomf copypasta."""
+        await context.send(load_static_text("chaos_pomf.txt"))
 
     @commands.command(pass_context=True)
     async def rules(self, context):
-        await context.send(
-            "1, Be excellent to each other.\n1.1, The Enter Key isn't a correct punctuation.\n2,  Party on, dude.\n3, Don't be dicks to each other.\n4, NO ABUSE OF POWER. PLAYFUL TEASING IS ALLOWED, BUT OUTRIGHT DICKERY SHALL NOT BE TOLERATED. IN ADDITION, FALSE NOTICES OF OFFICIAL  LOCALISATION/FAN TRANSLATION ANNOUNCEMENTS WILL BE TREATED AS AN ABUSE OF POWER, AND WILL BE DEALT WITH APPROPRIATELY.\n4.1, Puns are both permitted and encouraged by Sir 𝓑𝓵𝓲𝓬𝓴 𝓦𝓲𝓷𝓴𝓮𝓵 himself. Any such puns are exempt from all previous rules so long as they are sufficiently funny as ruled by the coucil of 𝓑𝓵𝓲𝓬𝓴 𝓦𝓲𝓷𝓴𝓮𝓵, 𝕊𝕥𝕖𝕚𝕟𝕖𝕣, and the Captain. In case any of the 3 are absent at the time of judgement, the majority rule shall go to whoever's name is higher on the member list."
-        )
+        """Print out the rules."""
+        await context.send(load_static_text("rules.txt"))
 
     @commands.command(pass_context=True)
     async def lenny(self, context):
+        """Send out a lenny."""
         await context.send("( ͡° ͜ʖ ͡°)")
 
     @commands.command(pass_context=True)
     async def ice(self, context):
-        await context.send(
-            "https://cdn.discordapp.com/attachments/124698456727093248/303973470180474901/iced.png"
-        )
+        """Send out an ice meme."""
+        await context.send(load_static_text("ice.txt"))
 
     @commands.command(pass_context=True)
     async def nudes(self, context):
-        await context.send(
-            "https://cdn.discordapp.com/attachments/128988222838669313/304093442454192138/PostingMemeOnline.png"
-        )
+        """Send out a meta meme."""
+        await context.send(load_static_text("nudes.txt"))
 
     @commands.command(pass_context=True)
     async def stalker(self, context):
+        """Send out this kaomoji."""
         await context.send("(´・ω・`)")
 
     @commands.command(pass_context=True)
     async def sonome(self, context):
+        """Send out the iconic phrase."""
         await context.send("その目、だれの目？")
 
     @commands.command(pass_context=True)
     async def IceBango(self, context):
-        await context.send(
-            "```Each morning, a missionary advertises neon sign\nHe tells the damn spaniard that Bango is fine\nAnd the spanish shota holler from an olive tree\nThat sexuality is a thing for me to see \nSo bango, bango, bango, I don't wanna cong her hoo, oh no no no no no\nBango, mingle, single, I'm so happy in wizardry, I refuse to go\nDon't want no sex life, false breasts, titfuck, sixty-nine, I make it clear\nThat no matter how they coax her, I'll stay 'ever pure```"
-        )
+        """Send out the IceBango copypasta."""
+        await context.send(load_static_text("ice_bango.txt"))
+
+    @commands.command(pass_context=True)
+    async def ping_everyone(self, context):
+        """Ping everyone."""
+        if context.author.id in config.ADMINS:
+            await context.send("@everyone (´・ω・`)")
 
 
 def setup(client):
+    """Add the cog to the client."""
     client.add_cog(Maho(client))
