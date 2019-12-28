@@ -106,7 +106,7 @@ venv.bak/
 # Maho Bot
 Logs/
 maho.db
-src/maho/static/
+src/maho/modules/static/
 
 # Editors
 .vscode/
