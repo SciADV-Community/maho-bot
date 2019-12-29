@@ -1,7 +1,6 @@
 language: python
 python: [3.6, 3.7]
 before_install:
-    - openssl aes-256-cbc -K $encrypted_5baae3a36782_key -iv $encrypted_5baae3a36782_iv -in secrets.tar.enc -out secrets.tar -d
     - pip install poetry
 install:
     - poetry install

@@ -20,6 +20,10 @@ class Festivity(BaseModel):
     date = DateField(unique=True, null=False)
     description = CharField(null=False)
 
+    def __str__(self):
+        """Get string representation of the object."""
+        return f"{self.date.strftime('%B %d')}: {self.description}"
+
 
 def setup_tables():
     """Set up the database."""

@@ -7,7 +7,7 @@ from maho import config, models, utils
 logger = utils.get_logger()
 
 # Model setup
-models.setup()
+models.setup_tables()
 
 # State
 loaded_modules = []

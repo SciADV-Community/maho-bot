@@ -2,7 +2,7 @@
 from pathlib import Path
 from datetime import datetime
 from discord.ext import commands
-from peewee import IntegrityError
+from peewee import IntegrityError, DoesNotExist
 from maho import config, utils
 from maho.models import Festivity
 
@@ -10,27 +10,16 @@ from maho.models import Festivity
 def get_festive_out(template: str) -> str:
     """Get a full list of festivities."""
     festivities = Festivity.select()
-    festivity_list = "\n".join(
-        [
-            f"{festivity.date.strftime('%B %d')}: {festivity.description}"
-            for festivity in festivities
-        ]
-    )
+    festivity_list = "\n".join([str(festivity) for festivity in festivities])
     return template.format(festivity_list)
 
 
-def add_festivity(date_str: str, description: str) -> str:
-    """Add a new festivity to the database."""
-    logger = utils.get_logger()
+def get_date(date_str: str):
+    """Get a datetime objects from a DD/MM string."""
     try:
-        date = datetime.strptime(date_str, "%d/%m")
-        Festivity.create(date=date, description=description)
-        return f"Festivity: `{date.strftime('%B %d')}: {description}` added."
+        return datetime.strptime(date_str, "%d/%m")
     except ValueError:
-        logger.info("Invalid date was entered %s", date_str)
-        return f"Invalid date: {date_str}, is it in the DD/MM format?"
-    except IntegrityError:
-        return f"Festivity at {date_str} already exists."
+        return None
 
 
 class Festive(commands.Cog):  # pragma: no cover
@@ -51,21 +40,42 @@ class Festive(commands.Cog):  # pragma: no cover
         await context.send(get_festive_out(template))
 
     @commands.command(pass_context=True)
-    async def add_festive(self, context, date, festivity):
+    async def add_festive(self, context, date_str, *, festivity):
         """Add a new festivity if you're an admin."""
-        if context.author.id in config.ADMINS:
-            await context.send(add_festivity(date, festivity))
-        else:
-            await context.send(
-                "You are not authorized to add festivities. "
-                + "Contact a bot administrator."
-            )
-            self.logger.info(
-                "Unauthorized User %s tried to add festivity %s at date %s.",
-                context.author,
-                festivity,
-                date,
-            )
+        if context.author.id not in config.ADMINS:
+            await context.send("You are not authorized to add festivities.")
+            return
+
+        date = get_date(date_str)
+        if not date:
+            await context.send(f"Invalid date string {date_str}. Is it in DD/MM?")
+            return
+
+        try:
+            result = Festivity.create(date=date, description=festivity)
+            await context.send(f"Festivity: `{result}` added.")
+        except IntegrityError:
+            await context.send(f"Festivity at {date_str} already exists.")
+
+    @commands.command(pass_context=True)
+    async def edit_festive(self, context, date_str, *, new_text):
+        """Edit a festivity."""
+        if context.author.id not in config.ADMINS:
+            await context.send("You are not authoirzed to edit festivities.")
+            return
+
+        date = get_date(date_str)
+        if not date:
+            await context.send(f"Invalid date string {date_str}. Is it in DD/MM?")
+            return
+
+        try:
+            festivity = Festivity.get(date=date)
+            festivity.description = new_text
+            festivity.save()
+            await context.send(f"Festivity updated: `{festivity}`")
+        except DoesNotExist:
+            await context.send(f"Festivity at date: {date_str} not found.")
 
 
 def setup(client):  # pragma: no cover

@@ -66,13 +66,13 @@ def config(prefix, description, token, admins, database):
     with dotenv.open(mode="w") as f:
         f.writelines(
             [
-                f"export BOT_PREFIX={prefix}\n",
-                f"export BOT_TOKEN={token}\n",
-                f"export BOT_DESCRIPTION={description}\n",
-                f"export BOT_ADMINS='{admins}'\n",
-                f"export BOT_MODULES='{modules}'\n",
-                f"export BOT_STARTUP_MODULES='{startup_modules}'\n",
-                f"export BOT_DB={database}\n",
+                f"BOT_PREFIX={prefix}\n",
+                f"BOT_TOKEN={token}\n",
+                f"BOT_DESCRIPTION={description}\n",
+                f"BOT_ADMINS='{admins}'\n",
+                f"BOT_MODULES='{modules}'\n",
+                f"BOT_STARTUP_MODULES='{startup_modules}'\n",
+                f"BOT_DB={database}\n",
             ]
         )
 
