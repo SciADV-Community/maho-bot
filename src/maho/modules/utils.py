@@ -19,7 +19,7 @@ def give_rating(text: str) -> int:
 def get_choice(choices) -> str:
     """Get a random choice between choices."""
     random.seed(get_md5_hash("".join(sorted(choices))))
-    return choices[random.randint(0, len(choices) - 1)]
+    return choices[random.randint(0, len(choices) - 1)].strip()
 
 
 class Utils(commands.Cog):  # pragma: no cover
