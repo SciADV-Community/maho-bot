@@ -1,43 +1,28 @@
 """Module to handle model operations."""
-import sqlite3
+from peewee import Model, CharField, DateField, SqliteDatabase
 from maho import config
 
-
-def auto_commit(func):
-    """Wrap a db-altering function and make sure results are saved."""
-    connection = sqlite3.connect(config.DB)
-    cursor = connection.cursor()
-
-    def wrapped(*args):
-        func(*args, cursor=cursor)
-
-    wrapped.cursor = cursor
-    connection.commit()
-    return wrapped
+DB = SqliteDatabase(config.DB)
 
 
-@auto_commit
-def setup(cursor=None):
+class BaseModel(Model):
+    """Abstract class to act as an ORM base."""
+
+    class Meta:
+        """Meta information for the class."""
+
+        database = DB
+
+
+class Festivity(BaseModel):
+    """ORM model to represent a festivity."""
+
+    date = DateField(unique=True, null=False)
+    description = CharField(null=False)
+
+
+def setup_tables():
     """Set up the database."""
-    cursor.execute(
-        """
-    CREATE TABLE IF NOT EXISTS Festive (
-        Date VARCHAR(255) UNIQUE NOT NULL,
-        Description VARCHAR(255) NOT NULL,
-        PRIMARY KEY(Date)
-    )
-    """
-    )
-
-
-@auto_commit
-def add_festivity(date, festivity, cursor=None):
-    """Add a new festivity."""
-    cursor.execute("INSERT INTO Festive VALUES (?, ?)", (date, festivity,))
-
-
-@auto_commit
-def get_festivities(cursor=None):
-    """Get all festivities."""
-    cursor.execute("SELECT * FROM Festive")
-    return cursor.fetchall()
+    DB.connect()
+    DB.create_tables([Festivity])
+    DB.close()

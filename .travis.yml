@@ -1,5 +1,15 @@
+language: python
+python:
+    - 3.6
+    - 3.7
 before_install:
+    - pip install poetry
     - openssl aes-256-cbc -K $encrypted_5baae3a36782_key -iv $encrypted_5baae3a36782_iv -in secrets/static.tar.enc -out secrets/static.tar -d
     - tar xvf secrets/static.tar -C src/maho/modules/
     - openssl aes-256-cbc -K $encrypted_5baae3a36782_key -iv $encrypted_5baae3a36782_iv -in secrets/Logs.tar.enc -out secrets/Logs.tar -d
     - tar xvf secrets/Logs.tar -C src/maho/
+install:
+    - poetry install
+script:
+    - poetry run flake8 maho test
+    - poetry run maho test
