@@ -22,5 +22,6 @@ deploy:
     script: ssh -i /tmp/deploy_rsa $RELEASE_SERVER_USER@$RELEASE_SERVER "cd ~/maho-bot; docker-compose down; git pull; docker-compose build; docker-compose up -d"
     on:
         branch: master
+        python: "3.7"
 after_success:
     - codecov -t "$CODECOV_TOKEN" -f "$HOME/.cache/codecov/coverage.xml"
