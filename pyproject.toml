@@ -23,6 +23,11 @@ rope = "^0.14.0"
 pytest-flake8 = "^1.0.4"
 pytest-env = "^0.6.2"
 
+[tool.poetry.scripts]
+config = "scripts:config"
+start = "scripts:start"
+test = "scripts:test"
+
 [build-system]
 requires = ["poetry>=0.12"]
 build-backend = "poetry.masonry.api"

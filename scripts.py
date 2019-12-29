@@ -16,13 +16,7 @@ def stringify_list(values, process=None):
     return f"[{', '.join(strings)}]"
 
 
-@click.group()
-def maho():
-    """Manage the bot."""
-    pass
-
-
-@maho.command()
+@click.command()
 @click.option(
     "--prefix", "-p", prompt="Prefix to use for bot commands", type=str, default="$"
 )
@@ -85,17 +79,13 @@ def config(prefix, description, token, admins, database):
     click.secho("Config initalized successfully.", fg="green")
 
 
-@maho.command()
+@click.command()
 def test():
     """Run tests."""
     subprocess.run("pytest")
 
 
-@maho.command()
-def run():
+@click.command()
+def start():
     """Run the bot."""
     runpy.run_module("maho.main", run_name="__main__")
-
-
-if __name__ == "__main__":
-    maho()
