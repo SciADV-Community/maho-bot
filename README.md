@@ -1,4 +1,6 @@
-# maho-bot
+# maho-bot 
+[![Build Status](https://travis-ci.org/evangelos-ch/maho-bot.svg?branch=master)](https://travis-ci.org/evangelos-ch/maho-bot)
+
 Fun utility bot on discord made for friends' sersvers with discord.py
 
 ## Development setup
