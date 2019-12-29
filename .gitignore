@@ -107,8 +107,7 @@ venv.bak/
 Logs/
 maho.db
 src/maho/modules/static/
-secrets/Logs.tar
-secrets/static.tar
+secrets.tar
 
 # Editors
 .vscode/
