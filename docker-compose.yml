@@ -1,0 +1,11 @@
+version: "3"
+services:
+    maho:
+        container_name: maho
+        hostname: maho
+        restart: unless-stopped
+        image: maho
+        build:
+            context: .
+        env_file:
+            - .env

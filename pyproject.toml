@@ -27,6 +27,7 @@ pytest-env = "^0.6.2"
 config = "scripts:config"
 start = "scripts:start"
 test = "scripts:test"
+init-db = "scripts:init_db"
 
 [build-system]
 requires = ["poetry>=0.12"]

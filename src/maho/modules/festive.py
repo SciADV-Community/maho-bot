@@ -9,7 +9,7 @@ from maho.models import Festivity
 
 def get_festive_out(template: str) -> str:
     """Get a full list of festivities."""
-    festivities = Festivity.select()
+    festivities = Festivity.select().order_by(Festivity.date)
     festivity_list = "\n".join([str(festivity) for festivity in festivities])
     return template.format(festivity_list)
 
@@ -17,7 +17,8 @@ def get_festive_out(template: str) -> str:
 def get_date(date_str: str):
     """Get a datetime objects from a DD/MM string."""
     try:
-        return datetime.strptime(date_str, "%d/%m")
+        date = datetime.strptime(date_str, "%d/%m")
+        return date.replace(year=2016)
     except ValueError:
         return None
 

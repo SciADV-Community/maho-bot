@@ -11,7 +11,14 @@ Fun utility bot on discord made for friends' sersvers with discord.py
 3. Run `poetry run config` to create a `.env` file containing important environment variables for the configuration of the bot.
 
 ## Running the bot
-Run `source .env && poetry run start`
+
+### Manually
+
+Run `export $(cat .env | xargs) && poetry run start`
+
+### Docker
+
+
 
 ## Running tests
 Run `poetry run test`

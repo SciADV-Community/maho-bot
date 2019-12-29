@@ -107,6 +107,7 @@ venv.bak/
 Logs/
 maho.db
 src/maho/modules/static/
+src/maho/fixtures/festive.yml
 secrets.tar
 
 # Editors

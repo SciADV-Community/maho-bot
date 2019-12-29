@@ -6,6 +6,8 @@ import runpy
 from pathlib import Path
 import click
 import inquirer
+import yaml
+from maho.models import Festivity, setup_tables
 
 
 def stringify_list(values, process=None):
@@ -30,7 +32,7 @@ def stringify_list(values, process=None):
 )
 def config(prefix, description, token, admins, database):
     """Initialize the bot's configuration."""
-    root_dir = Path(__file__).parent.parent
+    root_dir = Path(__file__).parent
 
     # Admin parsing
     admins = ";".join(re.split(r", |,| ", admins))
@@ -89,3 +91,22 @@ def test():
 def start():
     """Run the bot."""
     runpy.run_module("maho.main", run_name="__main__")
+
+
+@click.command()
+def init_db():
+    """Initialize the database from a fixture."""
+    setup_tables()
+    festive_fixtures = (
+        Path(__file__).parent / "src" / "maho" / "fixtures" / "festive.yml"
+    )
+    try:
+        with festive_fixtures.open() as f:
+            festivities = yaml.load(f, Loader=yaml.FullLoader)
+            for festivity in festivities:
+                festivity = next(iter(festivity.values()))
+                Festivity.get_or_create(
+                    date=festivity["date"], description=festivity["description"]
+                )
+    except FileNotFoundError:
+        pass

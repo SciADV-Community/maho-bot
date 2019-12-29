@@ -17,6 +17,7 @@ def test_get_date():
     """Test that get_date works as it should."""
     assert festive.get_date("01/10").day == 1
     assert festive.get_date("01/10").month == 10
+    assert festive.get_date("01/10").year == 2016
     assert festive.get_date("01/32") is None
     assert festive.get_date("random string") is None
     assert festive.get_date("31/02") is None
