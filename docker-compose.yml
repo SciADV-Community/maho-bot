@@ -9,3 +9,7 @@ services:
             context: .
         env_file:
             - .env
+        environment:
+            - BOT_DB=data/maho.db
+        volumes:
+            - data:/usr/src/app/data
