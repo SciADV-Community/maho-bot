@@ -59,7 +59,7 @@ class Markov(commands.Cog):  # pragma: no cover
     async def log(self, context):
         """Send out a random response using a markov chain."""
         random_file = random.randint(1, 61)
-        with open(Path(__file__).parent.parent / "Logs" / random_file) as file:
+        with open(Path(__file__).parent.parent / "Logs" / str(random_file)) as file:
             message = get_markov_message(file.readlines())
 
         await context.send(message)

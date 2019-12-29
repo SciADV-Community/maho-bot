@@ -71,9 +71,9 @@ def config(prefix, description, token, admins, database):
                 f"BOT_PREFIX={prefix}\n",
                 f"BOT_TOKEN={token}\n",
                 f"BOT_DESCRIPTION={description}\n",
-                f"BOT_ADMINS='{admins}'\n",
-                f"BOT_MODULES='{modules}'\n",
-                f"BOT_STARTUP_MODULES='{startup_modules}'\n",
+                f"BOT_ADMINS={admins}\n",
+                f"BOT_MODULES={modules}\n",
+                f"BOT_STARTUP_MODULES={startup_modules}\n",
                 f"BOT_DB={database}\n",
             ]
         )
