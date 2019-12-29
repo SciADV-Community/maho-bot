@@ -10,5 +10,5 @@ install:
 - poetry install
 script:
 - poetry run flake8 maho test
-- poetry run maho test
+- poetry run pytest
 - coverage report --fail-under=80
