@@ -1,14 +1,14 @@
 language: python
-python:
-- 3.6
-- 3.7
+python: [3.6, 3.7]
 before_install:
-- openssl aes-256-cbc -K $encrypted_5baae3a36782_key -iv $encrypted_5baae3a36782_iv
-  -in secrets.tar.enc -out secrets.tar -d
-- pip install poetry
+    - openssl aes-256-cbc -K $encrypted_5baae3a36782_key -iv $encrypted_5baae3a36782_iv -in secrets.tar.enc -out secrets.tar -d
+    - pip install poetry
 install:
-- poetry install
+    - poetry install
+    - pip install codecov
 script:
-- poetry run flake8 maho test
-- poetry run pytest
-- coverage report --fail-under=80
+    - poetry run flake8 maho test
+    - poetry run pytest --cov-report=xml:"$HOME/.cache/codecov/coverage.xml"
+    - coverage report --fail-under=80
+after_success:
+    - codecov -t "$CODECOV_TOKEN" -f "$HOME/.cache/codecov/coverage.xml"
