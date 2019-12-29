@@ -37,7 +37,3 @@ def test_add_festivity_invalid_date_logic(setup_db):
     """Test that a new festivity can't be added on an invalid date."""
     ret = festive.add_festivity("31/02", "Test Festivity")
     assert ret.startswith("Invalid date: 31/02")
-
-
-def test_fail(setup_db):
-    assert False
