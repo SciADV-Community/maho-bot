@@ -6,7 +6,7 @@ authors = ["Rain <Rain#8710>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.6"
 discord = "^1.0.1"
 click = "^7.0"
 inquirer = "^2.6.3"
