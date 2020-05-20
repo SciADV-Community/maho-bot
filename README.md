@@ -1,4 +1,5 @@
-# maho-bot 
+# maho-bot
+
 [![Build Status](https://travis-ci.org/evangelos-ch/maho-bot.svg?branch=master)](https://travis-ci.org/evangelos-ch/maho-bot)
 [![codecov](https://codecov.io/gh/evangelos-ch/maho-bot/branch/master/graph/badge.svg)](https://codecov.io/gh/evangelos-ch/maho-bot)
 
@@ -18,7 +19,11 @@ Run `export $(cat .env | xargs) && poetry run start`
 
 ### Docker
 
-
+1. Have `Docker` and `docker-compose` installed.
+2. Run `docker-compose build`.
+3. Configure the bot with `poetry run config`.
+4. Run `docker-compose up`.
 
 ## Running tests
+
 Run `poetry run test`
