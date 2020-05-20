@@ -1,7 +1,7 @@
 # maho-bot
 
-[![Build Status](https://travis-ci.org/evangelos-ch/maho-bot.svg?branch=master)](https://travis-ci.org/evangelos-ch/maho-bot)
-[![codecov](https://codecov.io/gh/evangelos-ch/maho-bot/branch/master/graph/badge.svg)](https://codecov.io/gh/evangelos-ch/maho-bot)
+[![Build Status](https://travis-ci.org/SciADV-Community/maho-bot.svg?branch=master)](https://travis-ci.org/SciADV-Community/maho-bot)
+[![codecov](https://codecov.io/gh/SciADV-Community/maho-bot/branch/master/graph/badge.svg)](https://codecov.io/gh/SciADV-Community/maho-bot)
 
 Fun utility bot on discord made for friends' sersvers with discord.py
 
