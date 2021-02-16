@@ -1,4 +1,4 @@
-"""Tests for teh festive commandset."""
+"""Tests for the festive commandset."""
 from datetime import datetime
 from maho.models import Festivity
 from maho.modules import festive

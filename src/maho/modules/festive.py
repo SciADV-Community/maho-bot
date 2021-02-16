@@ -62,7 +62,7 @@ class Festive(commands.Cog):  # pragma: no cover
     async def edit_festive(self, context, date_str, *, new_text):
         """Edit a festivity."""
         if context.author.id not in config.ADMINS:
-            await context.send("You are not authoirzed to edit festivities.")
+            await context.send("You are not authorized to edit festivities.")
             return
 
         date = get_date(date_str)

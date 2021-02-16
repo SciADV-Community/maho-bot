@@ -1,4 +1,5 @@
-#!env/bin/python3
+#!/usr/bin/env python3
+
 """Main module to run the bot."""
 from discord.ext import commands
 from maho import config, models, utils
@@ -99,7 +100,7 @@ async def on_message(message):
 async def on_command_error(context, error):
     """Handle error-handling from commands."""
     command = context.message.content.split()[0][1:]
-    logger.error("Error occured for command %s: %s", command, error)
+    logger.error("Error occurred for command %s: %s", command, error)
 
 
 # Running the client
