@@ -3,14 +3,14 @@ from maho.modules import utils
 
 
 def test_get_hash():
-    """Test that the md5 hash is retrieved properly."""
-    assert utils.get_md5_hash("test") == "098f6bcd4621d373cade4e832627b4f6"
+    """Test that the BLAKE2 hash is retrieved properly."""
+    assert utils.get_b2_hash("test") == "44a8995dd50b6657a037a7839304535b"
 
 
 def test_give_rating():
     """Test that ratings are given out consistently."""
-    assert utils.give_rating("Test") == 10
-    assert utils.give_rating("Test2") != 10
+    assert utils.give_rating("Test") == 7
+    assert utils.give_rating("Test2") != 7
 
 
 def test_get_choice():
