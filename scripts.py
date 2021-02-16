@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-"""Commandline utility to inetteract with the bot."""
+
+"""Command-line utility to interact with the bot."""
 import re
 import subprocess
 import runpy
@@ -78,7 +79,7 @@ def config(prefix, description, token, admins, database):
             ]
         )
 
-    click.secho("Config initalized successfully.", fg="green")
+    click.secho("Config initialized successfully.", fg="green")
 
 
 @click.command()

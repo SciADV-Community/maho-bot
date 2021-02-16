@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/SciADV-Community/maho-bot.svg?branch=master)](https://travis-ci.org/SciADV-Community/maho-bot)
 [![codecov](https://codecov.io/gh/SciADV-Community/maho-bot/branch/master/graph/badge.svg)](https://codecov.io/gh/SciADV-Community/maho-bot)
 
-Fun utility bot on discord made for friends' sersvers with discord.py
+Fun utility bot on discord made for friends' servers with discord.py
 
 ## Development setup
 
@@ -15,7 +15,7 @@ Fun utility bot on discord made for friends' sersvers with discord.py
 
 ### Manually
 
-Run `export $(cat .env | xargs) && poetry run start`
+Run `env $(<.env) poetry run start`
 
 ### Docker
 
@@ -26,4 +26,4 @@ Run `export $(cat .env | xargs) && poetry run start`
 
 ## Running tests
 
-Run `poetry run test`
+Run `poetry run test --cov-report=html`

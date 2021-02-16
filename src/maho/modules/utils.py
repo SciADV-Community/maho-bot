@@ -1,25 +1,25 @@
 """Cog wrapper module for general utility commands."""
 import random
-import hashlib
+from hashlib import blake2b
 from discord.ext import commands
 from maho import utils
 
 
-def get_md5_hash(text: str) -> str:
-    """Get a string of the md5 hash of a string."""
-    return hashlib.md5(bytes(text, "utf8")).hexdigest()
+def get_b2_hash(text: str) -> str:
+    """Get a string of the BLAKE2 hash of a string."""
+    return blake2b(bytes(text, "utf8"), digest_size=16).hexdigest()
 
 
 def give_rating(text: str) -> int:
     """Give a random rating on the input text."""
-    random.seed(get_md5_hash(text))
+    random.seed(get_b2_hash(text))
     return random.randint(0, 10)
 
 
 def get_choice(choices) -> str:
     """Get a random choice between choices."""
-    random.seed(get_md5_hash("".join(sorted(choices))))
-    return choices[random.randint(0, len(choices) - 1)].strip()
+    random.seed(get_b2_hash("".join(sorted(choices))))
+    return random.choice(choices).strip()
 
 
 class Utils(commands.Cog):  # pragma: no cover

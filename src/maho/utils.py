@@ -27,7 +27,7 @@ def get_logger():
 
 
 async def send_message(context, message):  # pragma: no cover
-    """Send a message if the the provided context is not None."""
+    """Send a message if the provided context is not None."""
     if context:
         await context.send(message)
 
@@ -42,7 +42,7 @@ async def load_module(client, module, context=None):  # pragma: no cover
             context.author.name,
             module,
         )
-        await send_message(context, f"You are not authorized to load modules.")
+        await send_message(context, "You are not authorized to load modules.")
         return False
 
     if module not in config.MODULES:
@@ -75,7 +75,7 @@ async def unload_module(client, module, context=None):  # pragma: no cover
             context.author.name,
             module,
         )
-        await send_message(context, f"You are not authorized to unload modules.")
+        await send_message(context, "You are not authorized to unload modules.")
         return False
 
     try:
