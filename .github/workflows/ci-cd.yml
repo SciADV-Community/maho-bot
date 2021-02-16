@@ -40,7 +40,7 @@ jobs:
     name: "Deployment"
     runs-on: ubuntu-20.04
     needs: [ci]
-    if: github.ref == "refs/heads/master"
+    if: github.ref == 'refs/heads/master'
     steps:
       - name: "Checkout repository"
         uses: actions/checkout@v2
