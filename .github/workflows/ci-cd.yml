@@ -21,7 +21,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.cache/pypoetry/virtualenvs
-          key: ${{runner.os}}-ci-${{hashFiles("poetry.lock")}}
+          key: ${{runner.os}}-ci-${{hashFiles('poetry.lock')}}
       - name: "Set up Python ${{matrix.python}}"
         uses: actions/setup-python@v2
         with:
