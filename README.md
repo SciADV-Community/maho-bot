@@ -1,6 +1,6 @@
 # maho-bot
 
-[![Build Status](https://travis-ci.org/SciADV-Community/maho-bot.svg?branch=master)](https://travis-ci.org/SciADV-Community/maho-bot)
+[![Build Status](https://github.com/SciADV-Community/maho-bot/workflows/CI%20%26%20CD/badge.svg)
 [![codecov](https://codecov.io/gh/SciADV-Community/maho-bot/branch/master/graph/badge.svg)](https://codecov.io/gh/SciADV-Community/maho-bot)
 
 Fun utility bot on discord made for friends' servers with discord.py
