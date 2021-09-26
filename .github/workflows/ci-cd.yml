@@ -49,9 +49,9 @@ jobs:
         with:
           host: ${{secrets.RELEASE_SERVER_HOST}}
           username: ${{secrets.RELEASE_SERVER_USER}}
-          key: ${{secrets.RELEASE_SERVER_KEY}}
+          password: ${{secrets.RELEASE_SERVER_PASSWORD}}
           script: >-
-            cd ~/maho-bot &&
+            cd /bot/maho-bot &&
             docker-compose down &&
             git pull &&
             docker-compose up --build -d
