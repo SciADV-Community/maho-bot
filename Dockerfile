@@ -28,6 +28,7 @@ COPY --from=build-env /app/.venv/lib/python3.10/site-packages /app/site-packages
 COPY scripts.py .
 
 # HACK - https://www.svlada.com/fun-times-with-gcc-musl-alpine-linux/
-RUN cp /lib64/ld-linux-x86-64.so.2 /lib/
+RUN apk add --update --no-cache libc6-compat\
+    && cp /lib64/ld-linux-x86-64.so.2 /lib/
 
 ENTRYPOINT ["python", "scripts.py", "start"]
