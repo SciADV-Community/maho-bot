@@ -1,6 +1,7 @@
 """Tests for the markov handling logic."""
 from pytest import fixture
-from maho.modules import markov
+
+from maho.cogs import markov
 
 
 @fixture
@@ -25,7 +26,7 @@ def sample_lines():
     ]
 
 
-def test_markov(sample_lines):
+def test_markov(sample_lines: list[str]):
     """Test that a valid markov chain message is generated."""
     message = markov.get_markov_message(sample_lines)
     assert len(message)

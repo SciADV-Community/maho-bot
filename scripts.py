@@ -2,12 +2,13 @@
 
 """Command-line utility to interact with the bot."""
 import re
-import subprocess
 import runpy
+import subprocess
 from pathlib import Path
+
 import click
-import inquirer
 import yaml
+
 from maho.models import Festivity, setup_tables
 
 
@@ -19,7 +20,12 @@ def stringify_list(values, process=None):
     return f"[{', '.join(strings)}]"
 
 
-@click.command()
+@click.group()
+def scripts():
+    pass
+
+
+@scripts.command()
 @click.option(
     "--prefix", "-p", prompt="Prefix to use for bot commands", type=str, default="$"
 )
@@ -38,32 +44,6 @@ def config(prefix, description, token, admins, database):
     # Admin parsing
     admins = ";".join(re.split(r", |,| ", admins))
 
-    # Module prompt
-    module_folder = root_dir / "src" / "maho" / "modules"
-    all_modules = [
-        file.stem
-        for file in module_folder.glob("*.py")
-        if not file.stem.startswith("__") and file.stem != "help"
-    ]
-
-    questions = [
-        inquirer.Checkbox(
-            "mods", message="Select the modules you want to load", choices=all_modules
-        )
-    ]
-    answers = inquirer.prompt(questions)
-    modules = ";".join([f"{module}" for module in answers["mods"]])
-
-    questions = [
-        inquirer.Checkbox(
-            "startup_mods",
-            message="Select the modules you want to load on startup",
-            choices=answers["mods"],
-        )
-    ]
-    answers = inquirer.prompt(questions)
-    startup_modules = ";".join([f"{module}" for module in answers["startup_mods"]])
-
     # Save into .env file
     dotenv = root_dir / ".env"
     with dotenv.open(mode="w") as f:
@@ -73,8 +53,6 @@ def config(prefix, description, token, admins, database):
                 f"BOT_TOKEN={token}\n",
                 f"BOT_DESCRIPTION={description}\n",
                 f"BOT_ADMINS={admins}\n",
-                f"BOT_MODULES={modules}\n",
-                f"BOT_STARTUP_MODULES={startup_modules}\n",
                 f"BOT_DB={database}\n",
             ]
         )
@@ -82,19 +60,19 @@ def config(prefix, description, token, admins, database):
     click.secho("Config initialized successfully.", fg="green")
 
 
-@click.command()
+@scripts.command()
 def test():
     """Run tests."""
     subprocess.run("pytest")
 
 
-@click.command()
+@scripts.command()
 def start():
     """Run the bot."""
     runpy.run_module("maho.main", run_name="__main__")
 
 
-@click.command()
+@scripts.command()
 def init_db():
     """Initialize the database from a fixture."""
     setup_tables()
@@ -111,3 +89,7 @@ def init_db():
                 )
     except FileNotFoundError:
         pass
+
+
+if __name__ == "__main__":
+    scripts()

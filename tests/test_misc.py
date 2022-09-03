@@ -1,5 +1,5 @@
 """Tests for misc functionality."""
-from maho.modules import maho
+from maho.cogs import maho
 from maho.utils import get_logger
 
 

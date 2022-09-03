@@ -106,7 +106,7 @@ venv.bak/
 # Maho Bot
 Logs/
 maho.db
-src/maho/modules/static/
+src/maho/cogs/static/
 src/maho/fixtures/festive.yml
 secrets.tar
 

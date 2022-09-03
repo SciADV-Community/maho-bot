@@ -1,7 +1,9 @@
 """Cog wrapper module for general utility commands."""
 import random
 from hashlib import blake2b
-from discord.ext import commands
+
+import discord
+
 from maho import utils
 
 
@@ -16,31 +18,39 @@ def give_rating(text: str) -> int:
     return random.randint(0, 10)
 
 
-def get_choice(choices) -> str:
+def get_choice(choices: list[str]) -> str:
     """Get a random choice between choices."""
     random.seed(get_b2_hash("".join(sorted(choices))))
     return random.choice(choices).strip()
 
 
-class Utils(commands.Cog):  # pragma: no cover
+class Utils(discord.Cog):  # pragma: no cover
     """Cog for the utility commandset."""
 
-    def __init__(self, client):
+    def __init__(self, client: discord.Bot):
         """Create the cog."""
-        self.client = client
+        self.client: discord.Bot = client
         self.logger = utils.get_logger()
         self.logger.info("Module %s loaded", self.__class__.__name__)
 
-    @commands.command(pass_context=True)
-    async def rate(self, context, *, arg):
-        """Rate something."""
-        await context.send(f"I'd give {arg} a {give_rating(arg)}/10")
+    @discord.slash_command(description="Rate something.")
+    async def rate(
+        self,
+        ctx: discord.ApplicationContext,
+        *,
+        arg: discord.Option(str, "Thing to rate.", required=True),
+    ):
+        await ctx.response.send_message(f"I'd give {arg} a {give_rating(arg)}/10")
 
-    @commands.command(pass_context=True)
-    async def choose(self, context, *, arg):
-        """Choose between comma-separated choices."""
+    @discord.slash_command(description="Choose between comma separated choices.")
+    async def choose(
+        self,
+        ctx: discord.ApplicationContext,
+        *,
+        arg: discord.Option(str, "Comma separated choices.", required=True),
+    ):
         choices = arg.split(",")
-        await context.send(f"I choose {get_choice(choices)}")
+        await ctx.response.send_message(f"I choose {get_choice(choices)}")
 
 
 def setup(client):  # pragma: no cover

@@ -1,5 +1,5 @@
 """Tests for the utility commands."""
-from maho.modules import utils
+from maho.cogs import utils
 
 
 def test_get_hash():

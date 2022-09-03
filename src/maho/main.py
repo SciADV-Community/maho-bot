@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 
 """Main module to run the bot."""
-from discord.ext import commands
+import discord
 from maho import config, models, utils
+
+import sqlite3
 
 # Logging
 logger = utils.get_logger()
@@ -11,97 +13,61 @@ logger = utils.get_logger()
 models.setup_tables()
 
 # State
-loaded_modules = []
-client = commands.Bot(command_prefix=config.PREFIX, description=config.DESCRIPTION)
+class Maho(discord.Bot):
+    """The main Bot class for Maho!"""
+
+    COGS = ["festive", "maho", "markov", "utils"]
+
+    def __init__(self, description=None, *args, **options):
+        """The main Bot class for Maho!
+
+        :param description: The bot description.
+        """
+        super().__init__(description, *args, **options)
+
+        # Load cogs
+        extensions = [f"maho.cogs.{cog}" for cog in self.COGS]
+        self.load_extensions(*extensions)
+
+    async def on_ready(self):
+        """Handle what happens when the bot is ready."""
+        logger.info(f"Logged in as {client.user.name} - {client.user.id}")
+        logger.info(f"------ Guilds ({len(client.guilds)}) ------")
+        for guild in client.guilds:
+            logger.info(guild.name)
+
+    async def on_application_command_error(
+        self, ctx: discord.ApplicationContext, error: discord.DiscordException
+    ):
+        """Handle errors globally."""
+        logger.error("Error occurred for command %s: %s", ctx.command, error)
 
 
-@client.event
-async def on_ready():
-    """Handle what happens when the bot is ready."""
-    print(f"Logged in as {client.user.name} - {client.user.id}")
-
-    print(f"------ Guilds ({len(client.guilds)}) ------")
-    for guild in client.guilds:
-        print(guild.name)
-
-    print(f"------ Loading Modules ({len(config.STARTUP)}) ------")
-    for module in config.STARTUP:
-        if await utils.load_module(client, module):
-            loaded_modules.append(module)
-
-
-# Commands
-@client.command(pass_context=True)
-async def load(context, module: str = None):
-    """Load a module."""
-    if not module:
-        await context.send("Load requires the name of the module to load.")
-    elif module not in loaded_modules:
-        if await utils.load_module(client, module, context):
-            loaded_modules.append(module)
-    else:
-        await context.send(f"Module {module} already loaded.")
-
-
-# Unloading a module
-@client.command(pass_context=True)
-async def unload(context, module: str = None):
-    """Unload a module."""
-    if not module:
-        await context.send("Unload requires the name of the module to unload.")
-    elif module in loaded_modules:
-        if await utils.unload_module(client, module, context):
-            loaded_modules.remove(module)
-    else:
-        await context.send(f"Module {module} not loaded.")
-
-
-# Reloading a module
-@client.command(pass_context=True)
-async def reload(context, module: str = None):
-    """Reload a module."""
-    if module:
-        if module in loaded_modules:
-            if await utils.unload_module(
-                client, module, context
-            ) and await utils.load_module(client, module, context):
-                await context.send(f"{module} reload complete.")
-        else:
-            await context.send(f"Module {module} not loaded.")
-    else:
-        for module in loaded_modules:
-            unloaded = await utils.unload_module(client, module, context)
-            if unloaded:
-                await utils.load_module(client, module, context)
-        else:
-            logger.warning(
-                "Unauthorized user %s attempted to reload all modules.",
-                context.author.username,
-            )
-
-
-@client.event
-async def on_message(message):
-    """Handle new messages."""
-    if message.author is not client:
-        if message.content.startswith("!!log"):
-            await message.channel.send("Are you fucking retarded")
-        elif message.content.startswith("!!!log"):
-            await message.channel.send(
-                "On how many layers of idiocy are you right now?"
-            )
-        elif message.content.startswith("!!!!log"):
-            await message.channel.send("You gotta stop drinking, dude")
-        else:
-            await client.process_commands(message)
-
-
-@client.event
-async def on_command_error(context, error):
-    """Handle error-handling from commands."""
-    command = context.message.content.split()[0][1:]
-    logger.error("Error occurred for command %s: %s", command, error)
-
+# Intents
+# TODO proper research on this
+intents = discord.Intents.default()
+intents.members = True
+intents.message_content = True
 
 # Running the client
+client = Maho(
+    description=config.DESCRIPTION,
+    intents=intents,
+)
 client.run(config.TOKEN)
+
+# TODO find some way to restore this functionality I guess
+# @client.event
+# async def on_message(message):
+#     """Handle new messages."""
+#     if message.author is not client:
+#         if message.content.startswith("!!log"):
+#             await message.channel.send("Are you fucking retarded")
+#         elif message.content.startswith("!!!log"):
+#             await message.channel.send(
+#                 "On how many layers of idiocy are you right now?"
+#             )
+#         elif message.content.startswith("!!!!log"):
+#             await message.channel.send("You gotta stop drinking, dude")
+#         else:
+#             await client.process_commands(message)

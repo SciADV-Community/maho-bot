@@ -12,4 +12,4 @@ services:
         environment:
             - BOT_DB=data/maho.db
         volumes:
-            - ./data:/usr/src/app/data
+            - ./data:/app/data

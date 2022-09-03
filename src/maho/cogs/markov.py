@@ -1,12 +1,14 @@
 """Cog wrapper module for the !log command and other markov operations."""
 import random
-from pathlib import Path
 from collections import Counter
-from discord.ext import commands
+from pathlib import Path
+
+import discord
+
 from maho import utils
 
 
-def get_markov_message(lines) -> str:
+def get_markov_message(lines: list[str]) -> str:
     """Get a random message based on a markov chain."""
     words_by_line = [line.split() for line in lines]
     words = [word for line in words_by_line for word in line]
@@ -46,23 +48,24 @@ def get_markov_message(lines) -> str:
     return " ".join(out)
 
 
-class Markov(commands.Cog):  # pragma: no cover
+class Markov(discord.Cog):  # pragma: no cover
     """Cog for the markov commandset."""
 
-    def __init__(self, client):
+    def __init__(self, client: discord.Bot):
         """Initialize the cog."""
-        self.client = client
+        self.client: discord.Bot = client
         self.logger = utils.get_logger()
         self.logger.info("Module %s loaded", self.__class__.__name__)
 
-    @commands.command(pass_context=True)
-    async def log(self, context):
-        """Send out a random response using a markov chain."""
+    @discord.slash_command(
+        description="Send out a random response using a markov chain."
+    )
+    async def log(self, ctx: discord.ApplicationContext):
         random_file = random.randint(1, 61)
         with open(Path(__file__).parent.parent / "Logs" / str(random_file)) as file:
             message = get_markov_message(file.readlines())
 
-        await context.send(message)
+        await ctx.respond(message)
 
 
 def setup(client):  # pragma: no cover

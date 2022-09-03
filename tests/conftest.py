@@ -1,5 +1,6 @@
 """Common fixtures."""
 import pytest
+
 from maho.models import DB, Festivity
 
 
