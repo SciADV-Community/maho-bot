@@ -1,57 +1,57 @@
 name: "CI & CD"
 
 on:
-  push:
-    branches: ["*"]
-  pull_request:
-    branches: ["*"]
+    push:
+        branches: ["*"]
+    pull_request:
+        branches: ["*"]
 
 jobs:
-  ci:
-    name: "Tests"
-    runs-on: ubuntu-20.04
-    strategy:
-      fail-fast: false
-      matrix:
-        python: [3.6, 3.7, 3.8, 3.9]
-    steps:
-      - name: "Checkout repository"
-        uses: actions/checkout@v2
-      - name: "Set up cache"
-        uses: actions/cache@v2
-        with:
-          path: ~/.cache/pypoetry/virtualenvs
-          key: ${{runner.os}}-ci-${{hashFiles('poetry.lock')}}
-      - name: "Set up Python ${{matrix.python}}"
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{matrix.python}}
-      - name: "Set up poetry"
-        uses: abatilo/actions-poetry@v2.1.0
-      - name: "Install dependencies"
-        run: poetry install
-      - name: "Run tests & check coverage"
-        run: poetry run pytest --cov-report=xml
-      - name: "Upload coverage to codecov"
-        uses: codecov/codecov-action@v1
-        if: success()
+    ci:
+        name: "Tests"
+        runs-on: ubuntu-20.04
+        strategy:
+            fail-fast: false
+            matrix:
+                python: [3.10]
+        steps:
+            - name: "Checkout repository"
+              uses: actions/checkout@v2
+            - name: "Set up cache"
+              uses: actions/cache@v2
+              with:
+                  path: ~/.cache/pypoetry/virtualenvs
+                  key: ${{runner.os}}-ci-${{hashFiles('poetry.lock')}}
+            - name: "Set up Python ${{matrix.python}}"
+              uses: actions/setup-python@v2
+              with:
+                  python-version: ${{matrix.python}}
+            - name: "Set up poetry"
+              uses: abatilo/actions-poetry@v2.1.0
+            - name: "Install dependencies"
+              run: poetry install
+            - name: "Run tests & check coverage"
+              run: poetry run pytest --cov-report=xml
+            - name: "Upload coverage to codecov"
+              uses: codecov/codecov-action@v1
+              if: success()
 
-  cd:
-    name: "Deployment"
-    runs-on: ubuntu-20.04
-    needs: [ci]
-    if: github.ref == 'refs/heads/master'
-    steps:
-      - name: "Checkout repository"
-        uses: actions/checkout@v2
-      - name: "Deploy to server"
-        uses: appleboy/ssh-action@v0.1.4
-        with:
-          host: ${{secrets.RELEASE_SERVER_HOST}}
-          username: ${{secrets.RELEASE_SERVER_USER}}
-          password: ${{secrets.RELEASE_SERVER_PASSWORD}}
-          script: >-
-            cd /bot/maho-bot &&
-            docker-compose down &&
-            git pull &&
-            docker-compose up --build -d
+    cd:
+        name: "Deployment"
+        runs-on: ubuntu-20.04
+        needs: [ci]
+        if: github.ref == 'refs/heads/master'
+        steps:
+            - name: "Checkout repository"
+              uses: actions/checkout@v2
+            - name: "Deploy to server"
+              uses: appleboy/ssh-action@v0.1.4
+              with:
+                  host: ${{secrets.RELEASE_SERVER_HOST}}
+                  username: ${{secrets.RELEASE_SERVER_USER}}
+                  password: ${{secrets.RELEASE_SERVER_PASSWORD}}
+                  script: >-
+                      cd /bot/maho-bot &&
+                      docker-compose down &&
+                      git pull &&
+                      docker-compose up --build -d
